@@ -3,20 +3,11 @@ import {useState} from "react"
 
 function App() {
   const [city, setCity] = useState("")
-  const [status, setStatus] = useState(false);
+  const [status, setStatus] = useState("");
 
-  //function displayStatus({status}) {
-   // if(status === "pending") {
-   // return ("pending")
-  //} else if (status === "success"){
-   // return ("Success!")
-  //} else if (status === "error") {
-   // return ("Something went wrong :(")
-  //}
-//};
-const params = new URLSearchParams({
+ const params = new URLSearchParams({
    access_key: "4026473a528afd970328714031324255",
-   query: "Greensboro",
+   query: city,
    units: "f"
  });
 
@@ -27,10 +18,15 @@ const handleSubmit = async e => {
   console.log(status);
 
     fetch(`http://api.weatherstack.com/current?${params}`)
-      .then(res => res.json()).then(console.log);
-}
+    .then(checkStatus).then(res => res.json()).then(console.log);
+ }
 
-
+ function checkStatus(res) {
+   if (!res.ok) {
+    throw new Error(res.statusText)
+   }
+   return res;
+ }
 
   return (
        <div className="parent-div">
@@ -40,9 +36,11 @@ const handleSubmit = async e => {
                id="city"
                placeholder="Search cities"
                value={city}
+               onChange={e => setCity(e.target.value)}
                ></input>
            </div>
            <div className="two">
+             {city}
            </div>
            <button className="three"
            onClick={handleSubmit}
