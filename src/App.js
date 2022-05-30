@@ -3,7 +3,10 @@ import {useState} from "react"
 
 function App() {
   const [city, setCity] = useState("")
-  const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [temp, setTemp] = useState(0);
+
+  //request => current => temperature
 
  const params = new URLSearchParams({
    access_key: "4026473a528afd970328714031324255",
@@ -14,19 +17,22 @@ function App() {
 const handleSubmit = async e => {
   e.preventDefault();
 
-  setStatus(true);
-  console.log(status);
+  setLoading(true);
+  console.log(loading);
 
-    fetch(`http://api.weatherstack.com/current?${params}`)
-    .then(checkStatus).then(res => res.json()).then(console.log);
+  const url = `http://api.weatherstack.com/current?${params}`
+  
+  try {
+    const res = await fetch(url);
+    const data = res.json();
+    console.log(data);
+  } catch (error) {
+    console.log("Error message: ", error);
+  } finally {
+    setLoading(false);
+  }
  }
 
- function checkStatus(res) {
-   if (!res.ok) {
-    throw new Error(res.statusText)
-   }
-   return res;
- }
 
   return (
        <div className="parent-div">
@@ -40,11 +46,13 @@ const handleSubmit = async e => {
                ></input>
            </div>
            <div className="two">
-             {city}
            </div>
            <button className="three"
            onClick={handleSubmit}
            >Submit</button>
+           <div>
+             Temperature: {temp} &#8457;
+           </div>
        </div>
   )
 };
@@ -52,4 +60,3 @@ const handleSubmit = async e => {
 
 export default App;
 
-//
