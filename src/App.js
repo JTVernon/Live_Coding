@@ -5,6 +5,7 @@ function App() {
   const [city, setCity] = useState("")
   const [loading, setLoading] = useState(false);
   const [temp, setTemp] = useState(0);
+  const [data, setData] = useState([])
 
   //request => current => temperature
 
@@ -24,13 +25,18 @@ const handleSubmit = async e => {
   
   try {
     const res = await fetch(url);
-    const data = res.json();
-    console.log(data);
+    const json = res.json();
+
+    console.log(json);
+
+    setData(json.data);
+
   } catch (error) {
     console.log("Error message: ", error);
   } finally {
     setLoading(false);
   }
+  console.log(loading);
  }
 
 
