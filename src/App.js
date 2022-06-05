@@ -4,8 +4,7 @@ import {useState} from "react"
 function App() {
   const [city, setCity] = useState("")
   const [loading, setLoading] = useState(false);
-  const [temp, setTemp] = useState(0);
-  const [data, setData] = useState([])
+  const [temp, setTemp] = useState("");
 
   //request => current => temperature
 
@@ -24,12 +23,16 @@ const handleSubmit = async e => {
   const url = `http://api.weatherstack.com/current?${params}`
   
   try {
-    const res = await fetch(url);
-    const json = res.json();
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(response.status);
+    }
+    const json_data = await response.json();
+    let data = json_data.current;
 
-    console.log(json);
+    console.log(data);
 
-    setData(json.data);
+    setTemp(data.temperature)
 
   } catch (error) {
     console.log("Error message: ", error);
@@ -38,6 +41,7 @@ const handleSubmit = async e => {
   }
   console.log(loading);
  }
+
 
 
   return (
@@ -57,7 +61,7 @@ const handleSubmit = async e => {
            onClick={handleSubmit}
            >Submit</button>
            <div>
-             Temperature: {temp} &#8457;
+             The Current Temperature in {city} is {temp} &#8457;
            </div>
        </div>
   )
