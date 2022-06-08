@@ -1,0 +1,62 @@
+ {/* //const getData = async () => {
+   setStatus(true);
+        //const res = await fetch('');
+
+        //const data = await res.json();
+        //setData(data[0]);
+        setStatus(false);
+   // }
+
+   //useEffect(() => {
+    //getData();
+   //}, []);
+
+
+
+
+  {/*}
+
+  function displayStatus({status}) {
+    if(status === "pending") {
+    return ("pending")
+  } else if (status === "success"){
+    return ("Success!")
+  } else if (status === "error") {
+    return ("Something went wrong :(")
+  }
+};
+
+
+
+const handleSubmit = async e => {
+  e.preventDefault();
+
+  setStatus(true);
+  console.log(status);
+
+     fetch(`http://api.weatherstack.com/current?${params}`)
+    .then(checkStatus).then(res => res.json()).then(console.log);
+ }
+
+ function checkStatus(res) {
+   if (!res.ok) {
+    throw new Error(res.statusText)
+   }
+   return res;
+ }
+
+ .parent-div {
+  display: flex;
+  flex-direction: row;
+}
+.one {
+  background-color: #4dd672;
+}
+
+.two {
+  background-color: #e664e8;
+}
+
+.three {
+  background-color: #64cee8;
+}
