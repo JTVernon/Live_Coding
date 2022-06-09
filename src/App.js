@@ -3,28 +3,13 @@ import {useState} from "react"
 
 function App() {
   const [city, setCity] = useState("")
-  const [unit, setUnit] = useState("°C");
+  const [fahrenheit, setFahrenheit] = useState("");
+  const [celsius, setCelsius] = useState("");
   const [loading, setLoading] = useState(false);
   const [temp, setTemp] = useState("");
   const [humidity, setHumidity] = useState("");
   const [windSpeed, setWindSpeed] = useState("");
   const [precip, setPrecip] = useState("");
-
-  const oppositeUnit = unit === "°C" ? "°F" : "°C";
-
-  const switchUnits = () => {
-    if (unit === "°C") {
-      const newTemp = temp * 1.8 + 32;
-      setTemp(Math.round(newTemp));
-      setUnit(oppositeUnit);
-    }
-
-    if (unit === "°F") {
-      const newTemp = ((temp - 32) * 5) / 9;
-      setTemp(Math.round(newTemp));
-      setUnit(oppositeUnit);
-    }
-  };
 
   //request => current => temperature
 
@@ -53,7 +38,9 @@ function App() {
       
       console.log(data);
       
-      setTemp(data.temperature);
+      setTemp(data.temperature + "°C");
+      setCelsius(data.temperature);
+      setFahrenheit(Math.round(data.temperature * 1.8 + 32));
       setHumidity(data.humidity);
       setWindSpeed(data.wind_speed);
       setPrecip(data.precip);
@@ -81,8 +68,15 @@ function App() {
                />
            <button className="button" onClick={handleSubmit}>Submit</button>
            </div>
-           <button className="button" onClick={switchUnits}>Convert to {oppositeUnit}</button>
-           
+           <div className="select">
+             <label value = "Temp Unit:">Temp Unit: </label>
+             <select id="unit" defaultValue = "Select unit"
+              onChange={(e) => setTemp(e.target.value)}>
+               <option></option>
+               <option value = {fahrenheit + "°F"}>Fahrenheit</option>
+               <option value = {celsius + "°C"}>Celsius</option>
+             </select>
+           </div>
          </div>
 
 
@@ -93,7 +87,7 @@ function App() {
            </div>
 
            <div className="temp">
-            <h1>{temp} {unit}</h1>
+            <h1>{temp}</h1>
            </div>
      </div>
 
