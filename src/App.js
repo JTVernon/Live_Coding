@@ -3,20 +3,19 @@ import {useState} from "react"
 
 function App() {
   const [city, setCity] = useState("")
-  const [fahrenheit, setFahrenheit] = useState("");
-  const [celsius, setCelsius] = useState("");
   const [loading, setLoading] = useState(false);
   const [temp, setTemp] = useState("");
   const [humidity, setHumidity] = useState("");
   const [windSpeed, setWindSpeed] = useState("");
   const [precip, setPrecip] = useState("");
+  const [units, setUnits]= useState("f")
 
   //request => current => temperature
 
  const params = new URLSearchParams({
    access_key: "4026473a528afd970328714031324255",
    query: city,
-   unit: "c",
+   units: units,
  });
 
  
@@ -38,9 +37,7 @@ function App() {
       
       console.log(data);
       
-      setTemp(data.temperature + "°C");
-      setCelsius(data.temperature);
-      setFahrenheit(Math.round(data.temperature * 1.8 + 32));
+      setTemp(data.temperature);
       setHumidity(data.humidity);
       setWindSpeed(data.wind_speed);
       setPrecip(data.precip);
@@ -71,37 +68,46 @@ function App() {
            <div className="select">
              <label value = "Temp Unit:">Temp Unit: </label>
              <select id="unit" defaultValue = "Select unit"
-              onChange={(e) => setTemp(e.target.value)}>
-               <option></option>
-               <option value = {fahrenheit + "°F"}>Fahrenheit</option>
-               <option value = {celsius + "°C"}>Celsius</option>
+              onChange={(e) => setUnits(e.target.value)}>
+               <option value = {"f"}>Fahrenheit</option>     
+               <option value = {"m"}>Celsius</option>      { /* Celsius is "m" (metric) in the API request */ }
              </select>
            </div>
          </div>
 
 
+    {
+      temp === '' 
+       ? (
+          <div style={{textAlign: 'center', paddingTop: '50px', paddingBottom: '20px'}}>Enter a city to get the current weather</div>
+        ) 
+        : (
+          <>
+          <div className="city/temp">
+            <div className="city">
+              <p>Weather in {city}</p>
+            </div>
 
-     <div className="city/temp">
-           <div className="city">
-             <p>Weather in {city}</p>
-           </div>
+            <div className="temp">
+              <h1>{`${temp}°${units}`}</h1>
+            </div>
+          </div>
 
-           <div className="temp">
-            <h1>{temp}</h1>
-           </div>
-     </div>
-
-      <div className="description">
-        <div className="rain">
-          Precipitation: {precip}%
-        </div>
-        <div className="humidity">
-          Humidity: {humidity}%
-        </div>
-        <div className = "wind_speed">
-          Wind Speed: {windSpeed}MPH
-        </div>
-      </div>
+          <div className="description">
+            <div className="rain">
+              Precipitation: {precip}%
+            </div>
+            <div className="humidity">
+              Humidity: {humidity}%
+            </div>
+            <div className = "wind_speed">
+              Wind Speed: {windSpeed}MPH
+            </div>
+          </div>
+        </>
+        )
+    }
+     
 
     </div>   
   )
